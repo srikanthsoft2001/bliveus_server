@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
 
-@Schema({ timestamps: true })
-export class User extends Document {
+@Schema()
+export class User 
+ {
+  @Prop({ type: SchemaTypes.ObjectId, auto: true})
+  _id: Types.ObjectId;
+
   @Prop({ required: true })
   firstName: string;
 
@@ -12,14 +16,23 @@ export class User extends Document {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true, select: false })
-  password: string;
+  @Prop({ select: true }) // if using this
+password: string;
 
-  @Prop({ default: '' })
-  phoneNumber: string;
+@Prop()
+phoneNumber: string;
 
-  @Prop({ default: '' })
+  @Prop()
   address: string;
-}
 
+  @Prop({ default: 'customer' })
+  role: string;
+
+@Prop({ select: false }) // optional: hide by default in queries
+refreshToken: string; 
+ }
 export const UserSchema = SchemaFactory.createForClass(User);
+
+
+
+
