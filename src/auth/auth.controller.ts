@@ -13,10 +13,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(JwtAuthGuard)
-  async login(
-    @CurrentUser() user: User,
-    @Res({ passthrough: true }) response: Response,
-  ) {
+  async login(@CurrentUser() user: User, @Res({ passthrough: true }) response: Response) {
     await this.authService.login(user, response);
   }
 
@@ -28,5 +25,4 @@ export class AuthController {
   // ){
   //   await this.authService.login(user,response);
   // }
-  
 }
