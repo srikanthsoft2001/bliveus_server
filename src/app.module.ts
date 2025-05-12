@@ -7,17 +7,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // Ensure the config module is globally available
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        uri: configService.getOrThrow('MONGO_URI'), // Ensure MONGO_URI is set in your .env file
+        uri: configService.getOrThrow('MONGO_URI'),
       }),
       inject: [ConfigService],
     }),
-    UserModule, // Import UserModule here
+    UserModule,
   ],
-  controllers: [AppController],  // AppController
-  providers: [AppService],  // AppService
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   constructor() {

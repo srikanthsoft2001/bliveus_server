@@ -2,9 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Types } from 'mongoose';
 
 @Schema()
-export class User 
- {
-  @Prop({ type: SchemaTypes.ObjectId, auto: true})
+export class User {
+  @Prop({ type: SchemaTypes.ObjectId, auto: true })
   _id: Types.ObjectId;
 
   @Prop({ required: true })
@@ -17,10 +16,10 @@ export class User
   email: string;
 
   @Prop({ select: true }) // if using this
-password: string;
+  password: string;
 
-@Prop()
-phoneNumber: string;
+  @Prop()
+  phoneNumber: string;
 
   @Prop()
   address: string;
@@ -28,11 +27,7 @@ phoneNumber: string;
   @Prop({ default: 'customer' })
   role: string;
 
-@Prop({ select: false }) // optional: hide by default in queries
-refreshToken: string; 
- }
+  @Prop({ select: false }) // optional: hide by default in queries
+  refreshToken: string;
+}
 export const UserSchema = SchemaFactory.createForClass(User);
-
-
-
-

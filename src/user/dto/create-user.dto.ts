@@ -1,4 +1,4 @@
-import { IsString, IsStrongPassword,IsEmail, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsStrongPassword, IsEmail, IsOptional, IsIn } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -22,6 +22,6 @@ export class CreateUserDto {
   @IsString()
   address?: string;
 
-  // @IsIn(['admin', 'customer'])
+  @IsIn(['admin', 'customer'])
   role: string;
 }

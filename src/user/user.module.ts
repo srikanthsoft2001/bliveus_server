@@ -9,14 +9,15 @@ dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ 
-      name: User.name, 
-      schema: UserSchema
-     },
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
     ]),
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports:[UserService]
+  exports: [UserService],
 })
 export class UserModule {}
