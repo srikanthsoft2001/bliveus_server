@@ -1,38 +1,34 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schema/user.schema';
+import { User } from './schemas/user.schema';
 import { FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import * as bcrypt from 'bcryptjs';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-
-    const createdUser = new this.userModel({
-      ...createUserDto,
-      password: hashedPassword,
-    });
-
-    return createdUser.save();
+  async createUser(data: CreateUserDto) {
+    await new this.userModel({
+      ...data,
+      password: await hash(data.password, 10),
+    }).save();
   }
 
   async getUser(query: FilterQuery<User>) {
-    const user = await this.userModel.findOne(query);
+    const user = (await this.userModel.findOne(query))?.toObject();
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('user not found!');
     }
-    return user.toObject();
+    return user;
   }
 
-  async getAllUsers() {
-    return this.userModel.find().exec();
+  async getUsers() {
+    return this.userModel.find({});
   }
 
   async updateUser(query: FilterQuery<User>, data: UpdateQuery<User>) {
-    return this.userModel.findOneAndUpdate(query, data, { new: true }).exec();
+    return this.userModel.findOneAndUpdate(query, data);
   }
 }
