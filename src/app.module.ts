@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProductModule } from './product/product.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    ProductModule,
     UserModule,
   ],
   controllers: [AppController],
@@ -21,6 +23,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 })
 export class AppModule {
   constructor() {
-    console.log('AppModule has been initialized');
+    // console.log('AppModule has been initialized');
   }
 }

@@ -5,6 +5,13 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // // Enable CORS for your frontend origin
+  // app.enableCors({
+  //   origin: 'http://localhost:5173/',
+  //   credentials: true,
+  // });
+
+  // Swagger setup
   const config = new DocumentBuilder()
     .setTitle('bliveus API')
     .setDescription('Bliveus API for Ecommerce Website')
