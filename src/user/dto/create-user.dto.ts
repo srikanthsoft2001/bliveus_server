@@ -18,10 +18,10 @@ export class CreateUserDto {
   // @IsString()
   // phoneNumber?: string;
 
-  @IsOptional()
-  @IsString()
-  address?: string;
+  // @IsOptional()
+  // @IsString()
+  // address?: string;
 
-  @IsIn(['admin', 'customer'])
-  role: string;
+  // @IsIn(['admin', 'customer'])
+  // role: string;
 }

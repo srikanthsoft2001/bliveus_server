@@ -12,11 +12,11 @@ export class User {
   @Prop({ select: true })
   password: string;
 
-  @Prop({ required: true })
-  firstName: string;
+  // @Prop({ required: true })
+  // firstName: string;
 
-  @Prop({ required: true })
-  lastName: string;
+  // @Prop({ required: true })
+  // lastName: string;
 
   @Prop()
   phoneNumber: string;
@@ -27,7 +27,7 @@ export class User {
   @Prop({ default: 'customer' })
   role: string;
 
-  @Prop()
+  @Prop({ select: true })
   // @Prop({ select: false })
   // error :  we need to look for security concerns in future.... for now it is disabled.
   refreshToken?: string;
