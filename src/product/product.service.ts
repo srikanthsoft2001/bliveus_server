@@ -29,4 +29,17 @@ export class ProductService {
   async findByCategory(category: string): Promise<Product[]> {
     return this.productModel.find({ category }).exec();
   }
+
+  // New search method
+  async searchProducts(query: string): Promise<Product[]> {
+    if (!query || query.trim() === '') return [];
+
+    const regex = new RegExp(query, 'i'); // case-insensitive regex
+
+    return this.productModel
+      .find({
+        $or: [{ name: regex }, { description: regex }],
+      })
+      .exec();
+  }
 }
