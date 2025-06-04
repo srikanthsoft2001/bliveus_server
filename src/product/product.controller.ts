@@ -29,4 +29,9 @@ export class ProductController {
   async delete(@Param('id') id: string): Promise<void> {
     return this.productService.delete(id);
   }
+  // NestJS: product.controller.ts
+  @Get('category/:categoryName')
+  async getByCategory(@Param('categoryName') name: string) {
+    return this.productService.findByCategory(name);
+  }
 }

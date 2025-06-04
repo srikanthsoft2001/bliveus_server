@@ -27,7 +27,12 @@ export class ProductService {
   }
 
   async findByCategory(category: string): Promise<Product[]> {
-    return this.productModel.find({ category }).exec();
+    try {
+      return await this.productModel.find({ category }).exec();
+    } catch (error) {
+      console.error('Error in findByCategory:', error);
+      throw error;
+    }
   }
 
   // New search method
