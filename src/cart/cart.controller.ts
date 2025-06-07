@@ -1,15 +1,15 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddToCartDto } from './dtos/add-to-cart.dto';
-import { ApplyCouponDto } from './dtos/apply-coupon.dto';
+
 
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Post('add')
-  addToCart(@Body() dto: AddToCartDto) {
-    return this.cartService.addToCart(dto);
+  addItem(@Body() dto: AddToCartDto) {
+    return this.cartService.addItem(dto);
   }
 
   @Get(':userId')
@@ -17,8 +17,27 @@ export class CartController {
     return this.cartService.getCart(userId);
   }
 
-  @Post('apply-coupon')
-  applyCoupon(@Body() dto: ApplyCouponDto) {
-    return this.cartService.applyCoupon(dto);
+  @Patch(':userId/:productId')
+  updateQuantity(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+    @Body('quantity') quantity: number,
+  ) {
+    return this.cartService.updateQuantity(userId, productId, quantity);
+  }
+
+  @Delete(':userId/:productId')
+  removeItem(@Param('userId') userId: string, @Param('productId') productId: string) {
+    return this.cartService.removeItem(userId, productId);
+  }
+
+  @Post('coupon')
+  applyCoupon(@Body('userId') userId: string, @Body('code') code: string) {
+    return this.cartService.applyCoupon(userId, code);
+  }
+
+  @Post('checkout')
+  checkout(@Body('userId') userId: string) {
+    return this.cartService.checkout(userId);
   }
 }

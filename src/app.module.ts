@@ -11,7 +11,6 @@ import { CartModule } from './cart/cart.module';
 
 
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,7 +24,8 @@ import { CartModule } from './cart/cart.module';
     UserModule,
     AuthModule,
     WishlistModule,
-    CartModule
+    CartModule,
+ 
     
   ],
   controllers: [AppController],
