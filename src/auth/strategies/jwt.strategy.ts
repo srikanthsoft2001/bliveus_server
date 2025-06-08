@@ -1,25 +1,19 @@
-import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
-import { Request } from 'express';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { TokenPayload } from '../interfaces/token-payload.interface';
-import { UserService } from 'src/user/user.service';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly userService: UserService,
-  ) {
+  constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => request.cookies?.Authentication,
-      ]),
-      secretOrKey: configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false, // reject expired tokens
+      secretOrKey: process.env.JWT_SECRET || 'defaultSecret', // better: use environment variable
     });
   }
-  async validate(payload: TokenPayload) {
-    return this.userService.getUser({ _id: payload.userId });
+
+  async validate(payload: { sub: string; email: string }) {
+    // This will be set as req.user in protected routes
+    return { userId: payload.sub, email: payload.email };
   }
 }

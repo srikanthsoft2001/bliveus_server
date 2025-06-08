@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './schemas/product.schema';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('products')
 export class ProductController {
@@ -10,6 +11,7 @@ export class ProductController {
   async getAll(): Promise<Product[]> {
     return this.productService.findAll();
   }
+
   @Get('search')
   async search(@Query('query') query: string): Promise<Product[]> {
     return this.productService.searchProducts(query);
@@ -29,9 +31,16 @@ export class ProductController {
   async delete(@Param('id') id: string): Promise<void> {
     return this.productService.delete(id);
   }
-  // NestJS: product.controller.ts
+
   @Get('category/:categoryName')
   async getByCategory(@Param('categoryName') name: string) {
     return this.productService.findByCategory(name);
+  }
+
+  // 🔒 Example protected route
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  getProtectedData() {
+    return { message: 'You are authenticated!' };
   }
 }

@@ -1,9 +1,5 @@
-import { IsString } from 'class-validator';
-
-export class LoginUserDto {
-  @IsString()
+// src/auth/dto/login.dto.ts
+export class LoginDto {
   email: string;
-
-  @IsString()
   password: string;
 }

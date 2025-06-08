@@ -1,23 +1,8 @@
-import { IsString, IsEmail, IsOptional } from 'class-validator';
-
+// src/users/dto/update-user.dto.ts
 export class UpdateUserDto {
-  @IsOptional()
-  @IsString()
-  firstName?: string;
-
-  @IsOptional()
-  @IsString()
-  lastName?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
-
-  @IsOptional()
-  @IsString()
-  phoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  address?: string;
+  readonly name?: string;
+  readonly email?: string;
+  readonly address?: string;
+  readonly currentPassword?: string;
+  readonly newPassword?: string;
 }

@@ -1,92 +1,40 @@
+// src/auth/auth.service.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { compare, hash } from 'bcryptjs';
-import { User } from 'src/user/schemas/user.schema';
-import { UserService } from 'src/user/user.service';
-import { TokenPayload } from './interfaces/token-payload.interface';
-import { Response } from 'express';
+import * as bcrypt from 'bcrypt';
+import { UserService } from '../user/user.service';
+import { LoginDto } from '../user/dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(user: User, response: Response) {
-    const expiresAccessToken = new Date();
-    expiresAccessToken.setTime(
-      expiresAccessToken.getTime() +
-        parseInt(this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_EXPIRATION_MS')),
-    );
+  // Validate user credentials and return user if valid
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.findByEmail(email);
+    if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const expiresRefreshToken = new Date();
-    expiresRefreshToken.setTime(
-      expiresRefreshToken.getTime() +
-        parseInt(this.configService.getOrThrow<string>('JWT_REFRESH_TOKEN_EXPIRATION_MS')),
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
 
-    const tokenPayload: TokenPayload = {
-      userId: user._id.toHexString(),
+    // Optionally remove sensitive info before returning
+    const { password: _, ...result } = user.toObject();
+    return result;
+  }
+
+  // Login user and return JWT token + user info
+  async login(loginDto: LoginDto) {
+    const user = await this.validateUser(loginDto.email, loginDto.password);
+
+    const payload = { email: user.email, sub: user._id };
+    const token = this.jwtService.sign(payload);
+    console.log(token);
+    return {
+      token,
+      user,
     };
-
-    const accessToken = this.jwtService.sign(tokenPayload, {
-      secret: this.configService.getOrThrow('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: `${this.configService.getOrThrow('JWT_ACCESS_TOKEN_EXPIRATION_MS')}ms`,
-    });
-
-    const refreshToken = this.jwtService.sign(tokenPayload, {
-      secret: this.configService.getOrThrow('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: `${this.configService.getOrThrow('JWT_REFRESH_TOKEN_EXPIRATION_MS')}ms`,
-    });
-
-    await this.userService.updateUser(
-      { _id: user._id },
-      { $set: { refreshToken: await hash(refreshToken, 10) } },
-    );
-
-    response.cookie('Authentication', accessToken, {
-      httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
-      expires: expiresAccessToken,
-    });
-    response.cookie('Refresh', refreshToken, {
-      httpOnly: true,
-      secure: this.configService.get('NODE_ENV') === 'production',
-      expires: expiresRefreshToken,
-    });
-  }
-
-  async verifyUser(email: string, password: string) {
-    try {
-      const user = await this.userService.getUser({
-        email,
-      });
-      const authenticated = await compare(password, user.password);
-      if (!authenticated) {
-        throw new UnauthorizedException();
-      }
-      return user;
-    } catch (error) {
-      throw new UnauthorizedException('Credentials are not valid!');
-    }
-  }
-
-  async verifyUserRefreshToken(refreshToken: string, userId: string) {
-    try {
-      const user = await this.userService.getUser({ _id: userId });
-      if (!user.refreshToken) {
-        throw new UnauthorizedException('Refresh token is missing!');
-      }
-      const authenticated = await compare(refreshToken, user.refreshToken);
-      if (!authenticated) {
-        throw new UnauthorizedException();
-      }
-      return user;
-    } catch (error) {
-      throw new UnauthorizedException();
-    }
   }
 }

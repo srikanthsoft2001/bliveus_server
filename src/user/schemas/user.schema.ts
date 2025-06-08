@@ -9,11 +9,11 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ select: true })
+  @Prop({ required: true })
   password: string;
 
-  // @Prop({ required: true })
-  // firstName: string;
+  @Prop({ required: true })
+  name: string;
 
   // @Prop({ required: true })
   // lastName: string;
@@ -33,3 +33,4 @@ export class User {
   refreshToken?: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
+export type UserDocument = User & Document;
