@@ -9,8 +9,6 @@ import { UserModule } from './user/user.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { CartModule } from './cart/cart.module';
 
-
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,8 +23,6 @@ import { CartModule } from './cart/cart.module';
     AuthModule,
     WishlistModule,
     CartModule,
- 
-    
   ],
   controllers: [AppController],
   providers: [AppService],

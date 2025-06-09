@@ -13,7 +13,6 @@ export interface Product extends Document {
   stockQuantity: number;
   category: string;
   rating: number;
-  
 }
 
 export const ProductSchema = new Schema<Product>(
