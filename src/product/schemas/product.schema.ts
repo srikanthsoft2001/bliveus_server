@@ -4,7 +4,7 @@ export interface Product extends Document {
   name: string;
   description: string;
   price: Types.Decimal128;
-  salePrice: number;
+  salePrice: string;
   discountPercentage: string;
   color: string;
   size: string;
@@ -21,7 +21,7 @@ export const ProductSchema = new Schema<Product>(
      name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Schema.Types.Decimal128, required: true },
-    salePrice: { type: Number, required: true },
+    salePrice: { type: String, required: true },
     color: { type: String, required: true },
     size: { type: String, required: true },
     mainImageUrl: { type: String, required: true },
