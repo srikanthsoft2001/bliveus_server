@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -17,6 +18,7 @@ import { CurrentUser } from 'src/auth/current-user.decorator';
 import { User } from './schemas/user.schema';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AddToWishlistDto, RemoveFromWishlistDto } from './dto/wishlist.dto';
 
 @Controller('users')
 export class UserController {
@@ -42,5 +44,26 @@ export class UserController {
       throw new NotFoundException(`User with id ${_id} not found`);
     }
     return updatedUser;
+  }
+
+@Get(':id/wishlist')
+  async getWishlist(@Param('id') userId: string) {
+    return this.userService.getWishlist(userId);
+  }
+
+  @Post(':id/wishlist')
+  async addToWishlist(
+    @Param('id') userId: string,
+    @Body() addToWishlistDto: AddToWishlistDto
+  ) {
+    return this.userService.addToWishlist(userId, addToWishlistDto.productId);
+  }
+
+  @Delete(':id/wishlist')
+  async removeFromWishlist(
+    @Param('id') userId: string,
+    @Body() removeFromWishlistDto: RemoveFromWishlistDto
+  ) {
+    return this.userService.removeFromWishlist(userId, removeFromWishlistDto.productId);
   }
 }

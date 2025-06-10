@@ -6,8 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
-import { WishlistModule } from './wishlist/wishlist.module';
-import { CartModule } from './cart/cart.module';
 
 
 
@@ -23,8 +21,7 @@ import { CartModule } from './cart/cart.module';
     ProductModule,
     UserModule,
     AuthModule,
-    WishlistModule,
-    CartModule,
+    
  
     
   ],

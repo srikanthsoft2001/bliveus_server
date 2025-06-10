@@ -56,4 +56,35 @@ export class UserService {
   async findByEmail(email: string) {
     return this.userModel.findOne({ email }).exec(); // returns Mongoose document or null
   }
+async addToWishlist(userId: string, productId: string): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { wishlist: productId } },
+      { new: true }
+    ).populate('wishlist').exec();
+    
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async removeFromWishlist(userId: string, productId: string): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(
+      userId,
+      { $pull: { wishlist: productId } },
+      { new: true }
+    ).populate('wishlist').exec();
+    
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async getWishlist(userId: string): Promise<User> {
+    const user = await this.userModel.findById(userId)
+      .populate('wishlist')
+      .select('wishlist')
+      .exec();
+    
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
 }
