@@ -1,61 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { SchemaTypes, Types } from 'mongoose';
+import { User } from '../../user/schemas/user.schema';
+import { CartItem, CartItemSchema } from './cart-item.schema';
 
-export type CartDocument = Cart & Document;
-
-@Schema({
-  timestamps: true,
-  toJSON: {
-    virtuals: true,
-    transform: function (doc, ret) {
-      delete ret.__v;
-      return ret;
-    }
-  }
-})
+@Schema({ timestamps: true })
 export class Cart {
-  @Prop({ required: true, index: true })
-  userId: string;
+  @Prop({ type: SchemaTypes.ObjectId, auto: true })
+  _id: Types.ObjectId;
 
-  @Prop({ required: true, index: true })
-  productId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User', required: true, unique: true })
+  user: User;
 
-  @Prop({ required: true })
-  productName: string;
+  @Prop({ type: [CartItemSchema], default: [] })
+  items: CartItem[];
 
-  @Prop({ 
-    required: true, 
-    min: 0,
-    validate: {
-      validator: Number.isFinite,
-      message: 'Price must be a valid number'
-    }
-  })
-  price: number;
+  @Prop({ default: 0 })
+  totalPrice: number;
 
-  @Prop({ 
-    required: true, 
-    min: 1,
-    validate: {
-      validator: Number.isInteger,
-      message: 'Quantity must be an integer'
-    }
-  })
-  quantity: number;
-
-  @Prop({ 
-    required: true, 
-    min: 0,
-    default: 0,
-    validate: {
-      validator: Number.isFinite,
-      message: 'Subtotal must be a valid number'
-    }
-  })
-  subtotal: number;
+  @Prop({ default: 0 })
+  totalItems: number;
 }
 
 export const CartSchema = SchemaFactory.createForClass(Cart);
-
-// Add index for faster queries
-CartSchema.index({ userId: 1, productId: 1 }, { unique: true });
+export type CartDocument = Cart & Document;

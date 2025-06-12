@@ -15,7 +15,7 @@ export class WishlistService {
   }
 
   async findByUserId(userId: string): Promise<Wishlist | null> {
-    return this.wishlistModel.findOne({ userId }).populate('products').exec();
+    return this.wishlistModel.findOne({ userId }).populate('products');
   }
 
   async update(userId: string, updateWishlistDto: UpdateWishlistDto): Promise<Wishlist | null> {
