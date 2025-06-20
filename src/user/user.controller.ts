@@ -34,6 +34,7 @@ export class UserController {
   async getUserById(@Param('_id') _id: string) {
     return this.userService.getUserById(_id);
   }
+
   @Put(':_id')
   async updateUserById(
     @Param('_id') _id: string,
@@ -46,23 +47,20 @@ export class UserController {
     return updatedUser;
   }
 
-@Get(':id/wishlist')
+  @Get(':id/wishlist')
   async getWishlist(@Param('id') userId: string) {
     return this.userService.getWishlist(userId);
   }
 
   @Post(':id/wishlist')
-  async addToWishlist(
-    @Param('id') userId: string,
-    @Body() addToWishlistDto: AddToWishlistDto
-  ) {
+  async addToWishlist(@Param('id') userId: string, @Body() addToWishlistDto: AddToWishlistDto) {
     return this.userService.addToWishlist(userId, addToWishlistDto.productId);
   }
 
   @Delete(':id/wishlist')
   async removeFromWishlist(
     @Param('id') userId: string,
-    @Body() removeFromWishlistDto: RemoveFromWishlistDto
+    @Body() removeFromWishlistDto: RemoveFromWishlistDto,
   ) {
     return this.userService.removeFromWishlist(userId, removeFromWishlistDto.productId);
   }
