@@ -37,4 +37,10 @@ export class AuthService {
       user,
     };
   }
+  async verifyUserRefreshToken(refreshToken: string, userId: string) {
+    const user = await this.userService.findById(userId);
+    // Optional: Verify stored hashed refresh token if implemented
+    if (!user) return null;
+    return user;
+  }
 }

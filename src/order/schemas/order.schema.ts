@@ -8,17 +8,22 @@ export class Order {
   @Prop({ required: true })
   customerId: string;
 
+  @Prop({
+    type: [{ productId: String, name: String, quantity: Number, price: Number }],
+    required: true,
+  })
+  items: {
+    productId: string;
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+
   @Prop({ required: true })
-  productId: string;
-
-  @Prop({ required: true, min: 1 })
-  quantity: number;
-
-  @Prop({ required: true, min: 0 })
   totalPrice: number;
 
-  @Prop({ default: 'pending' })
-  status: string; // e.g., pending, completed, cancelled
+  @Prop({ default: 'Pending' })
+  status: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

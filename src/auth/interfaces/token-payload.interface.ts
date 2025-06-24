@@ -1,3 +1,4 @@
 export interface TokenPayload {
-  userId: string;
+  sub: string; // user ID
+  email: string;
 }
