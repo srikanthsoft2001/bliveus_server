@@ -15,7 +15,7 @@ export class CartController {
 
   @Get()
   async getCart(@CurrentUser() user: User): Promise<CartResponseDto> {
-    return this.cartService.getCart(user._id.toString());
+    return this.cartService.getCart(user.userId.toString());
   }
 
   @Put()
@@ -23,17 +23,17 @@ export class CartController {
     @CurrentUser() user: User,
     @Body() updateCartDto: UpdateCartDto,
   ): Promise<CartResponseDto> {
-    return this.cartService.updateCart(user._id.toString(), updateCartDto);
+    return this.cartService.updateCart(user.userId.toString(), updateCartDto);
   }
 
   @Delete('clear')
   async clearCart(@CurrentUser() user: User): Promise<CartResponseDto> {
-    return this.cartService.clearCart(user._id.toString());
+    return this.cartService.clearCart(user.userId.toString());
   }
 
   @Delete()
   async deleteCart(@CurrentUser() user: User): Promise<void> {
-    return this.cartService.deleteCart(user._id.toString());
+    return this.cartService.deleteCart(user.userId.toString());
   }
   @Post('add')
   async addItemToCart(
@@ -42,6 +42,6 @@ export class CartController {
   ): Promise<CartResponseDto> {
     console.log('Authenticated user:', user); //  Check if this is undefined
 
-    return this.cartService.addItem(user._id.toString(), itemDto);
+    return this.cartService.addItem(user.userId.toString(), itemDto);
   }
 }
