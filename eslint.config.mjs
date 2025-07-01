@@ -1,35 +1,24 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import path from 'node:path'; // ✅ Fix: import path module
+import plugin from '@typescript-eslint/eslint-plugin';
+import parser from '@typescript-eslint/parser';
 
-export default tseslint.config(
+export default [
   {
-    ignores: ['eslint.config.mjs', 'dist/', 'node_modules/'],
-  },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
-  {
+    files: ['**/*.ts'],
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'module',
+      parser,
       parserOptions: {
-        project: true,
-        tsconfigRootDir: new URL('.', import.meta.url).pathname,
+        project: './tsconfig.json',
+        tsconfigRootDir: path.resolve(),
+        sourceType: 'module',
       },
     },
-  },
-  {
+    plugins: {
+      '@typescript-eslint': plugin,
+    },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      'prettier/prettier': 'error',
+      ...plugin.configs.recommended.rules,
+      ...plugin.configs['recommended-requiring-type-checking'].rules,
     },
   },
-);
+];
