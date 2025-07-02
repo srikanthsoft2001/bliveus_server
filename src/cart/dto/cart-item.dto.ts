@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
-import { Product } from 'src/product/schemas/product.schema';
+// import { Product } from 'src/product/schemas/product.schema';
 
 export class CartItemDto {
   @IsNotEmpty()

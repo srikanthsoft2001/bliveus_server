@@ -15,7 +15,7 @@ export class AuthController {
 
   @Get('validate-token')
   @UseGuards(JwtAuthGuard)
-  async validateToken(@Req() req: Request) {
+  validateToken(@Req() req: Request) {
     return req.user; // Decoded user from JWT
   }
 }

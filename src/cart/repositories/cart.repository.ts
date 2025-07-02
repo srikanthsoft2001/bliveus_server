@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Cart, CartDocument } from '../schemas/cart.schema';
+import { CartItems } from '../interfaces/cart-item.interface';
 
 @Injectable()
 export class CartRepository {
   constructor(@InjectModel(Cart.name) private cartModel: Model<CartDocument>) {}
 
-  async addItemToCart(userId: string, item: any): Promise<CartDocument | null> {
+  async addItemToCart(userId: string, item: CartItems): Promise<CartDocument | null> {
     return this.cartModel
       .findOneAndUpdate(
         { user: userId },
@@ -39,7 +40,7 @@ export class CartRepository {
 
   async updateCart(
     userId: string,
-    items: any[],
+    items: CartItems[],
     totalPrice: number,
     totalItems: number,
   ): Promise<CartDocument | null> {

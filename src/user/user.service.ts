@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,7 +11,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
   //crate user
   async createUser(data: CreateUserDto) {
-    console.log('got data' + CreateUserDto);
+    console.log('got data', CreateUserDto);
     await new this.userModel({
       ...data,
       password: await bcrypt.hash(data.password, 10),

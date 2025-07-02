@@ -21,6 +21,7 @@ export class AuthService {
     if (!isPasswordValid) throw new UnauthorizedException('Invalid credentials');
 
     // Optionally remove sensitive info before returning
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...result } = user.toObject();
     return result;
   }

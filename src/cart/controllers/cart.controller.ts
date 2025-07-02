@@ -1,5 +1,4 @@
-// src/cart/controllers/cart.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, UseGuards } from '@nestjs/common';
 import { CartService } from '../services/cart.service';
 import { UpdateCartDto } from '../dto/update-cart.dto';
 import { CartResponseDto } from '../dto/cart-response.dto';

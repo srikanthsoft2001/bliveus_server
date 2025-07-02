@@ -1,15 +1,15 @@
-// src/cart/services/cart.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CartRepository } from '../repositories/cart.repository';
 import { UpdateCartDto } from '../dto/update-cart.dto';
 import { CartResponseDto } from '../dto/cart-response.dto';
 import { CartItemDto } from '../dto/cart-item.dto';
+import { CartItems } from '../interfaces/cart-item.interface';
 
 @Injectable()
 export class CartService {
   constructor(private readonly cartRepository: CartRepository) {}
 
-  private calculateTotals(items: any[]): { totalPrice: number; totalItems: number } {
+  private calculateTotals(items: CartItems[]): { totalPrice: number; totalItems: number } {
     const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
     return { totalPrice, totalItems };

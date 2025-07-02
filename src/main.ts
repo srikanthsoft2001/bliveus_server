@@ -8,19 +8,14 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Middleware and global validation pipe
   app.useGlobalPipes(new ValidationPipe());
-
-  // Enable cookie parser for reading refresh tokens in cookies
   app.use(cookieParser());
 
-  // Enable CORS for frontend access with credentials
   app.enableCors({
-    origin: 'http://localhost:5173', // your frontend origin
-    credentials: true, // allow cookies to be sent
+    origin: 'http://localhost:5173',
+    credentials: true,
   });
 
-  // Swagger documentation setup
   const config = new DocumentBuilder()
     .setTitle('My API')
     .setDescription('API documentation')
@@ -30,8 +25,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Listen on dynamic port or default 3000
   await app.listen(process.env.PORT || 3000);
 }
 
-bootstrap();
+bootstrap().catch(err => {
+  console.error('Error during application bootstrap:', err);
+});

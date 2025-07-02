@@ -13,12 +13,11 @@ export interface Product extends Document {
   stockQuantity: number;
   category: string;
   rating: number;
-  
 }
 
 export const ProductSchema = new Schema<Product>(
   {
-     name: { type: String, required: true },
+    name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Schema.Types.Decimal128, required: true },
     salePrice: { type: String, required: true },
@@ -28,21 +27,21 @@ export const ProductSchema = new Schema<Product>(
     imageUrls: { type: [String], required: true },
     stockQuantity: { type: Number, required: true },
     category: { type: String, required: true },
-    rating: { type: Number, required: true, min: 0, max: 5 }
+    rating: { type: Number, required: true, min: 0, max: 5 },
   },
   {
     timestamps: true,
     toJSON: {
       virtuals: true,
       versionKey: false,
-      transform: (_, ret) => {
-        ret.id = ret._id;
-        delete ret._id;
-        
-        if (ret.price && typeof ret.price.toString === 'function') {
-          ret.price = ret.price.toString();
-        }
-      },
+      // transform: (_, ret) => {
+      //   ret.id = ret._id;
+      //   delete ret._id;
+
+      //   if (ret.price && typeof ret.price.toString === 'function') {
+      //     ret.price = ret.price.toString();
+      //   }
+      // },
     },
-  }
+  },
 );

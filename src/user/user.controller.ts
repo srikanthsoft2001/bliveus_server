@@ -1,22 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Put,
-  Req,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CurrentUser } from 'src/auth/current-user.decorator';
+// import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+// import { CurrentUser } from 'src/auth/current-user.decorator';
 import { User } from './schemas/user.schema';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AddToWishlistDto, RemoveFromWishlistDto } from './dto/wishlist.dto';
 

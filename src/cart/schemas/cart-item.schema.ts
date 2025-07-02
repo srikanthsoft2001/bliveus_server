@@ -1,6 +1,6 @@
 // src/cart/schemas/cart-item.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { SchemaTypes, Types } from 'mongoose';
+import { SchemaTypes } from 'mongoose';
 
 @Schema({ _id: false })
 export class CartItem {
