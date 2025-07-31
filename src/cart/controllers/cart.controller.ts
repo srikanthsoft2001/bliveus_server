@@ -1,3 +1,4 @@
+// src/cart/controllers/cart.controller.ts
 import { Controller, Get, Post, Put, Delete, Body, UseGuards } from '@nestjs/common';
 import { CartService } from '../services/cart.service';
 import { UpdateCartDto } from '../dto/update-cart.dto';
@@ -39,8 +40,6 @@ export class CartController {
     @CurrentUser() user: User,
     @Body() itemDto: CartItemDto,
   ): Promise<CartResponseDto> {
-    console.log('Authenticated user:', user); //  Check if this is undefined
-
     return this.cartService.addItem(user.userId.toString(), itemDto);
   }
 }

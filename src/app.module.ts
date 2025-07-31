@@ -8,6 +8,8 @@ import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { OrderModule } from './order/order.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
+// import { WishlistModule } from './wishlist/wishlist.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     UserModule,
     AuthModule,
     OrderModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
