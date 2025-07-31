@@ -3,45 +3,48 @@ import { Schema, Document, Types } from 'mongoose';
 export interface Product extends Document {
   name: string;
   description: string;
-  price: Types.Decimal128;
+  originalPrice: Types.Decimal128;
   salePrice: string;
   discountPercentage: string;
-  color: string;
-  size: string;
+  color?: string;
+  size?: string;
   mainImageUrl: string;
-  imageUrls: string[];
+  subimageUrls: string[];
   stockQuantity: number;
   category: string;
-  rating: number;
+  rating?: number;
+  saleType: string;
 }
 
 export const ProductSchema = new Schema<Product>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Schema.Types.Decimal128, required: true },
+    originalPrice: { type: Schema.Types.Decimal128, required: true },
     salePrice: { type: String, required: true },
-    color: { type: String, required: true },
-    size: { type: String, required: true },
+    discountPercentage: { type: String, required: true },
+    color: { type: String },
+    size: { type: String },
     mainImageUrl: { type: String, required: true },
-    imageUrls: { type: [String], required: true },
+    subimageUrls: { type: [String], required: true },
     stockQuantity: { type: Number, required: true },
     category: { type: String, required: true },
-    rating: { type: Number, required: true, min: 0, max: 5 },
+    rating: { type: Number, min: 0, max: 5 },
+    saleType: { type: String, required: true },
   },
   {
-    timestamps: true,
     toJSON: {
       virtuals: true,
       versionKey: false,
-      // transform: (_, ret) => {
-      //   ret.id = ret._id;
-      //   delete ret._id;
+      transform: (_: unknown, ret: Record<string, unknown>) => {
+        ret.id = ret._id;
+        delete ret._id;
 
-      //   if (ret.price && typeof ret.price.toString === 'function') {
-      //     ret.price = ret.price.toString();
-      //   }
-      // },
+        const originalPrice = ret.originalPrice as Types.Decimal128 | undefined;
+        if (originalPrice && typeof originalPrice.toString === 'function') {
+          ret.originalPrice = originalPrice.toString();
+        }
+      },
     },
   },
 );
