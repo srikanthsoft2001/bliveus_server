@@ -5,7 +5,7 @@ import { Product } from './schemas/product.schema';
 
 @Injectable()
 export class ProductService {
-  constructor(@InjectModel('Product') private productModel: Model<Product>) {}
+  constructor(@InjectModel('Product') private readonly productModel: Model<Product>) {}
 
   async findAll(): Promise<Product[]> {
     return this.productModel.find().exec();
@@ -21,26 +21,21 @@ export class ProductService {
     const createdProduct = new this.productModel(productData);
     return createdProduct.save();
   }
+
   async delete(id: string): Promise<void> {
     const result = await this.productModel.deleteOne({ _id: id }).exec();
-    if (result.deletedCount === 0) throw new NotFoundException('Product not found');
-  }
-
-  async findByCategory(category: string): Promise<Product[]> {
-    try {
-      return await this.productModel.find({ category }).exec();
-    } catch (error) {
-      console.error('Error in findByCategory:', error);
-      throw error;
+    if (result.deletedCount === 0) {
+      throw new NotFoundException('Product not found');
     }
   }
 
-  // New search method
+  async findByCategory(category: string): Promise<Product[]> {
+    return this.productModel.find({ category }).exec();
+  }
+
   async searchProducts(query: string): Promise<Product[]> {
-    if (!query || query.trim() === '') return [];
-
-    const regex = new RegExp(query, 'i'); // case-insensitive regex
-
+    if (!query?.trim()) return [];
+    const regex = new RegExp(query, 'i');
     return this.productModel
       .find({
         $or: [{ name: regex }, { description: regex }],

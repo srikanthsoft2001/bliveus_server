@@ -1,11 +1,10 @@
 export class CreateProductDto {
-    name: string;
-    description: string;
-    price: string;  
-    size: string;
-    mainImageUrl: string;
-    imageUrls: string[];
-    stockQuantity: number;
-    category: string;
-  }
-  
+  name: string;
+  description: string;
+  originalPrice: string;
+  salePrice: string;
+  discountPercentage: number;
+  stockQuantity: number;
+  category: string;
+  saleType: string;
+}

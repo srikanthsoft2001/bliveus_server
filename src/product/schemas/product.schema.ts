@@ -1,19 +1,18 @@
-import { Schema, Document, Types } from 'mongoose';
+import { Schema, Document, Types, model } from 'mongoose';
 
 export interface Product extends Document {
   name: string;
   description: string;
   originalPrice: Types.Decimal128;
-  salePrice: string;
-  discountPercentage: string;
-  color?: string;
-  size?: string;
+  salePrice: Types.Decimal128;
+  discountPercentage?: number;
   mainImageUrl: string;
-  subimageUrls: string[];
+  subImageUrls: string[];
   stockQuantity: number;
   category: string;
-  rating?: number;
   saleType: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const ProductSchema = new Schema<Product>(
@@ -21,16 +20,13 @@ export const ProductSchema = new Schema<Product>(
     name: { type: String, required: true },
     description: { type: String, required: true },
     originalPrice: { type: Schema.Types.Decimal128, required: true },
-    salePrice: { type: String, required: true },
-    discountPercentage: { type: String, required: true },
-    color: { type: String },
-    size: { type: String },
+    salePrice: { type: Schema.Types.Decimal128, required: true },
+    discountPercentage: { type: Number },
     mainImageUrl: { type: String, required: true },
-    subimageUrls: { type: [String], required: true },
+    subImageUrls: { type: [String], required: true },
     stockQuantity: { type: Number, required: true },
     category: { type: String, required: true },
-    rating: { type: Number, min: 0, max: 5 },
-    saleType: { type: String, required: true },
+    saleType: { type: String, required: true, default: 'none' },
   },
   {
     toJSON: {
@@ -40,11 +36,17 @@ export const ProductSchema = new Schema<Product>(
         ret.id = ret._id;
         delete ret._id;
 
-        const originalPrice = ret.originalPrice as Types.Decimal128 | undefined;
-        if (originalPrice && typeof originalPrice.toString === 'function') {
-          ret.originalPrice = originalPrice.toString();
-        }
+        const decimalFields = ['originalPrice', 'salePrice'];
+        decimalFields.forEach(field => {
+          const value = ret[field] as Types.Decimal128 | undefined;
+          if (value && typeof value.toString === 'function') {
+            ret[field] = parseFloat(value.toString());
+          }
+        });
       },
     },
+    timestamps: true,
   },
 );
+
+export const ProductModel = model<Product>('Product', ProductSchema);
